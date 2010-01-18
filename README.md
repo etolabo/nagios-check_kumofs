@@ -9,9 +9,9 @@ WHAT IS kumofs?
 "kumofs" is a scalable and highly available distributed key-value store.
 
 see also:
-* [http://github.com/etolabo/kumofs#readme]
-* [http://github.com/etolabo/kumofs/blob/master/doc/doc.en.md]
-* [http://github.com/etolabo/kumofs]
+* [http://github.com/etolabo/kumofs#readme](http://github.com/etolabo/kumofs#readme)
+* [http://github.com/etolabo/kumofs/blob/master/doc/doc.en.md](http://github.com/etolabo/kumofs/blob/master/doc/doc.en.md)
+* [http://github.com/etolabo/kumofs](http://github.com/etolabo/kumofs)
 
 INSTALLATION
 ================
@@ -70,7 +70,7 @@ SEE ALSO
 
 check_memcached_paranoid
 ----------------
-* [http://github.com/hirose31/nagios-check_memcached_paranoid]
+* [http://github.com/hirose31/nagios-check_memcached_paranoid](http://github.com/hirose31/nagios-check_memcached_paranoid)
 
 check_memcached_paranodi is Nagios plugin for validating sequence of SET, GET, DELETE, GET by memcached protocol.
 
