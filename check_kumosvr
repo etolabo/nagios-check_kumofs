@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+
+load "/usr/local/bin/kumoctl"
+
+
+class KumoServer < KumoRPC
+	def initialize(host, port)
+        begin
+            super(host, port)
+        rescue => ex
+            p ex
+            exit 2
+        end
+	end
+
+	def GetStatus(key)
+		send_request_sync_ex(Protocol::GetStatus, [key])
+	end
+
+	STAT_PID         = 0
+	STAT_UPTIME      = 1
+	STAT_TIME        = 2
+	STAT_VERSION     = 3
+	STAT_CMD_GET     = 4
+	STAT_CMD_SET     = 5
+	STAT_CMD_DELETE  = 6
+	STAT_DB_ITEMS    = 7
+	STAT_CLOCKTIME   = 8
+
+	CONF_TCP_NODELAY = 0
+end
+
+if $0 == __FILE__
+
+
+def usage
+	puts "Usage: #{File.basename($0)} address[:port=#{KumoRPC::SERVER_DEFAULT_PORT}]"
+	exit 1
+end
+
+if ARGV.length > 2
+	usage
+end
+
+addr = ARGV.shift
+host, port = addr.split(':', 2)
+port ||= KumoRPC::SERVER_DEFAULT_PORT
+
+cmd = ARGV.shift
+
+n = KumoServer.new(host, port).GetStatus(KumoServer::STAT_DB_ITEMS)
+puts "items: #{n}"
+if n < 500
+    exit 1
+else
+    exit 0
+end
+
+end   # if $0 == __FILE__
