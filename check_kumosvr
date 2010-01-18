@@ -1,45 +1,40 @@
 #!/usr/bin/env ruby
+#
+# Copyright (C) Etolabo Corp. All rights reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+#
 
-load "/usr/local/bin/kumoctl"
-
-
-class KumoServer < KumoRPC
-	def initialize(host, port)
-        begin
-            super(host, port)
-        rescue => ex
-            p ex
-            exit 2
-        end
-	end
-
-	def GetStatus(key)
-		send_request_sync_ex(Protocol::GetStatus, [key])
-	end
-
-	STAT_PID         = 0
-	STAT_UPTIME      = 1
-	STAT_TIME        = 2
-	STAT_VERSION     = 3
-	STAT_CMD_GET     = 4
-	STAT_CMD_SET     = 5
-	STAT_CMD_DELETE  = 6
-	STAT_DB_ITEMS    = 7
-	STAT_CLOCKTIME   = 8
-
-	CONF_TCP_NODELAY = 0
+# search kumostat and load
+[
+    "/usr/local/bin",
+    File.dirname(__FILE__),
+].map {|x| x+"/kumostat"}.each do |ks|
+    if File::file?(ks)
+        load ks
+        break
+    end
 end
 
-if $0 == __FILE__
-
+NUMBER_OF_LOWEST_ITEMS = 500
 
 def usage
-	puts "Usage: #{File.basename($0)} address[:port=#{KumoRPC::SERVER_DEFAULT_PORT}]"
-	exit 1
+    puts "Usage: #{File.basename($0)} address[:port=#{KumoRPC::SERVER_DEFAULT_PORT}]"
+    exit 1
 end
 
-if ARGV.length > 2
-	usage
+if ARGV.length != 1
+    usage
 end
 
 addr = ARGV.shift
@@ -50,10 +45,8 @@ cmd = ARGV.shift
 
 n = KumoServer.new(host, port).GetStatus(KumoServer::STAT_DB_ITEMS)
 puts "items: #{n}"
-if n < 500
+if n < NUMBER_OF_LOWEST_ITEMS
     exit 1
 else
     exit 0
 end
-
-end   # if $0 == __FILE__
